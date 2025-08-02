@@ -1,0 +1,59 @@
+---
+const generateUUID = () => {
+	return crypto.randomUUID()
+}
+
+const generateMultipleUUIDs = (count: number) => {
+	return Array.from({ length: count }, () => generateUUID())
+}
+
+let uuids: string[] = generateMultipleUUIDs(8)
+---
+
+<div class="grid place-items-center min-h-screen bg-zinc-800 p-4">
+	<div class="max-w-md w-full space-y-4">
+		<h1 class="text-2xl text-sky-500 font-bold text-center">
+			UUID Generator
+		</h1>
+
+		<div id="uuids-container" class="space-y-2">
+			{
+				uuids.map(uuid => (
+					<p
+						class="uuid-item p-3 bg-zinc-700 rounded cursor-pointer text-sky-400 text-center font-mono hover:bg-zinc-600 transition-colors"
+						data-uuid={uuid}
+					>
+						{uuid}
+					</p>
+				))
+			}
+		</div>
+	</div>
+</div>
+
+<script is:inline>
+	document.addEventListener('DOMContentLoaded', () => {
+		// Add click handlers
+		document.querySelectorAll('.uuid-item').forEach(item => {
+			item.addEventListener('click', async function () {
+				const uuid = this.dataset.uuid
+				const originalText = this.textContent
+
+				try {
+					await navigator.clipboard.writeText(uuid)
+					this.textContent = 'Copied!'
+					this.classList.replace('text-sky-400', 'text-white')
+					this.classList.replace('bg-zinc-700', 'bg-blue-600')
+
+					setTimeout(() => {
+						this.textContent = originalText
+						this.classList.replace('text-white', 'text-sky-400')
+						this.classList.replace('bg-blue-600', 'bg-zinc-700')
+					}, 1000)
+				} catch (err) {
+					console.error('Copy failed:', err)
+				}
+			})
+		})
+	})
+</script>
