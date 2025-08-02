@@ -35,6 +35,9 @@ let uuids: string[] = generateMultipleUUIDs(8)
 	document.addEventListener('DOMContentLoaded', () => {
 		// Add click handlers
 		document.querySelectorAll('.uuid-item').forEach(item => {
+		    const randomUuid = crypto.randomUUID()
+		    item.innerHTML = randomUuid
+			item.dataset.uuid = randomUuid
 			item.addEventListener('click', async function () {
 				const uuid = this.dataset.uuid
 				const originalText = this.textContent
